@@ -26,7 +26,8 @@
 ### 增强功能 🚧
 - [x] 热-力耦合分析模块（本地测试通过）
 - [ ] 热-力耦合分析在cao设备验证
-- [ ] 裂缝扩展模拟
+- [x] 裂缝扩展模拟模块（本地测试通过）
+- [ ] 裂缝扩展模拟在cao设备验证
 - [ ] 参数化优化
 - [ ] GUI界面
 
@@ -40,6 +41,7 @@
 | local_test.py | 本地代码验证 | ✅ 通过 |
 | remote_test.py | 远程设备测试 | ✅ 可用 |
 | test_thermal.py | 热耦合模块本地测试 | ✅ 通过 |
+| test_damage.py | 损伤模块本地测试 | ✅ 通过 |
 
 ### 功能模块
 | 模块 | 功能 | 状态 |
@@ -54,14 +56,31 @@
 | cohesive.py | 层间接触 | ✅ |
 | postprocess.py | 后处理 | ✅ |
 | thermal_coupled.py | 热-力耦合分析 | 🚧 本地通过 |
+| damage_plasticity.py | 混凝土损伤塑性 | 🚧 本地通过 |
+| xfem_crack.py | XFEM裂缝扩展 | 🚧 本地通过 |
 
 ### 示例脚本
 | 脚本 | 功能 | 状态 |
 |------|------|------|
 | example.py | 完整工作流示例 | ✅ |
 | example_thermal.py | 热-力耦合示例 | 🚧 待cao验证 |
+| example_damage.py | 损伤裂缝示例 | 🚧 待cao验证 |
 
 ## 开发日志
+
+### 2026-02-19 (06:20 AM) 💥 新功能
+- 添加裂缝扩展模拟模块
+  - damage_plasticity.py: 混凝土损伤塑性(CDP)
+    - 压缩/拉伸损伤定义
+    - 层间弱面材料
+    - 损伤输出配置
+  - xfem_crack.py: XFEM裂缝扩展
+    - 裂缝富集定义
+    - 断裂准则(MaxPS)
+    - 损伤演化律
+  - example_damage.py: 完整示例
+  - test_damage.py: 本地测试通过
+- **待办**: 在cao设备上验证损伤功能
 
 ### 2026-02-19 (05:15 AM) 🔥 新功能
 - 添加热-力耦合分析模块 (thermal_coupled.py)
