@@ -2,8 +2,8 @@
 
 ## 当前状态
 - 项目位置: `/home/ganansuan647/.openclaw/workspace-cxy/abaqus_learn/abaqus_3dpc/`
-- Git状态: 领先origin/master 8个commit
-- **状态: 所有核心功能已完成并测试通过！**
+- Git状态: 领先origin/master 12个commits
+- **状态: 所有核心功能已完成，热-力耦合分析开发中**
 
 ## 任务完成情况
 
@@ -23,6 +23,13 @@
 - [x] 添加后处理功能
 - [x] 完善文档和示例
 
+### 增强功能 🚧
+- [x] 热-力耦合分析模块（本地测试通过）
+- [ ] 热-力耦合分析在cao设备验证
+- [ ] 裂缝扩展模拟
+- [ ] 参数化优化
+- [ ] GUI界面
+
 ## 可用脚本
 
 ### 测试脚本
@@ -32,6 +39,7 @@
 | main_complete.py | 完整版模型 | ✅ cao设备通过 |
 | local_test.py | 本地代码验证 | ✅ 通过 |
 | remote_test.py | 远程设备测试 | ✅ 可用 |
+| test_thermal.py | 热耦合模块本地测试 | ✅ 通过 |
 
 ### 功能模块
 | 模块 | 功能 | 状态 |
@@ -45,8 +53,28 @@
 | meshing.py | 网格划分 | ✅ |
 | cohesive.py | 层间接触 | ✅ |
 | postprocess.py | 后处理 | ✅ |
+| thermal_coupled.py | 热-力耦合分析 | 🚧 本地通过 |
+
+### 示例脚本
+| 脚本 | 功能 | 状态 |
+|------|------|------|
+| example.py | 完整工作流示例 | ✅ |
+| example_thermal.py | 热-力耦合示例 | 🚧 待cao验证 |
 
 ## 开发日志
+
+### 2026-02-19 (05:15 AM) 🔥 新功能
+- 添加热-力耦合分析模块 (thermal_coupled.py)
+  - 混凝土/钢筋热属性定义
+  - CoupledTempDisplacementStep
+  - 对流换热和辐射边界条件
+  - 初始温度场设置
+- 添加热耦合示例 (example_thermal.py)
+  - 5层打印温度模拟
+  - 对流冷却 + 表面辐射
+  - 温度/应力场输出
+- 本地测试通过 (test_thermal.py)
+- **待办**: 在cao设备上验证热耦合功能
 
 ### 2026-02-19 (03:12 AM) ✅ 里程碑
 - 完整版3DPC模型在cao设备测试通过
