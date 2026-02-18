@@ -28,7 +28,8 @@
 - [ ] 热-力耦合分析在cao设备验证
 - [x] 裂缝扩展模拟模块（本地测试通过）
 - [ ] 裂缝扩展模拟在cao设备验证
-- [ ] 参数化优化
+- [x] 参数化优化模块（本地测试通过）
+- [ ] 参数化优化在cao设备验证
 - [ ] GUI界面
 
 ## 可用脚本
@@ -42,6 +43,7 @@
 | remote_test.py | 远程设备测试 | ✅ 可用 |
 | test_thermal.py | 热耦合模块本地测试 | ✅ 通过 |
 | test_damage.py | 损伤模块本地测试 | ✅ 通过 |
+| test_parametric.py | 参数化模块本地测试 | ✅ 通过 |
 
 ### 功能模块
 | 模块 | 功能 | 状态 |
@@ -58,6 +60,8 @@
 | thermal_coupled.py | 热-力耦合分析 | 🚧 本地通过 |
 | damage_plasticity.py | 混凝土损伤塑性 | 🚧 本地通过 |
 | xfem_crack.py | XFEM裂缝扩展 | 🚧 本地通过 |
+| parametric.py | 参数化研究 | 🚧 本地通过 |
+| optimization.py | 优化框架 | 🚧 本地通过 |
 
 ### 示例脚本
 | 脚本 | 功能 | 状态 |
@@ -65,8 +69,22 @@
 | example.py | 完整工作流示例 | ✅ |
 | example_thermal.py | 热-力耦合示例 | 🚧 待cao验证 |
 | example_damage.py | 损伤裂缝示例 | 🚧 待cao验证 |
+| example_parametric.py | 参数化研究示例 | 🚧 待cao验证 |
 
 ## 开发日志
+
+### 2026-02-19 (07:25 AM) 📊 新功能
+- 添加参数化优化模块
+  - parametric.py: 参数化研究框架
+    - DesignVariable/DesignStudy类
+    - 预定义研究(层厚/配筋/跨高比)
+  - optimization.py: 优化框架
+    - 目标函数和约束定义
+    - 网格搜索优化
+    - 灵敏度分析
+  - example_parametric.py: 完整示例
+  - test_parametric.py: 本地测试通过
+- **待办**: 在cao设备上验证参数化功能
 
 ### 2026-02-19 (06:20 AM) 💥 新功能
 - 添加裂缝扩展模拟模块
