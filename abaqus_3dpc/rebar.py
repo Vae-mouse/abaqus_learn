@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Rebar mesh creation for 3D printed concrete beam.
-Creates top and bottom rebar layers.
+Creates top and bottom rebar layers using wire elements.
 """
 
 from abaqus import *
@@ -61,6 +61,7 @@ def create_rebar_layers(model, assembly, config):
 def _create_longitudinal_rebars(part, config, z_pos, layer_name):
     """
     Create longitudinal rebars at specified height.
+    Uses WirePolyLine to create truss elements.
     
     Args:
         part: Rebar part
@@ -77,24 +78,25 @@ def _create_longitudinal_rebars(part, config, z_pos, layer_name):
         if y_pos > config.beam_width - config.rebar_cover:
             break
         
-        # Create wire for rebar
-        sketch = part.ConstrainedSketch(
-            name='__rebar_long_%s_%d__' % (layer_name, i),
-            sheetSize=config.beam_length
-        )
+        # Create datum points for rebar ends
+        p1 = (0.0, y_pos, z_pos)
+        p2 = (config.beam_length, y_pos, z_pos)
         
-        sketch.Line(
-            point1=(0.0, y_pos),
-            point2=(config.beam_length, y_pos)
-        )
+        dp1 = part.DatumPointByCoordinate(coords=p1)
+        dp2 = part.DatumPointByCoordinate(coords=p2)
         
-        # Create wire feature
-        part.Wire(sketch=sketch)
+        # Create wire between points
+        part.WirePolyLine(
+            points=((part.datums[dp1.id], part.datums[dp2.id]),),
+            mergeType=IMPRINT,
+            meshable=ON
+        )
 
 
 def _create_transverse_rebars(part, config, z_pos, layer_name):
     """
     Create transverse rebars at specified height.
+    Uses WirePolyLine to create truss elements.
     
     Args:
         part: Rebar part
@@ -111,16 +113,16 @@ def _create_transverse_rebars(part, config, z_pos, layer_name):
         if x_pos > config.beam_length - config.rebar_cover:
             break
         
-        # Create wire for rebar
-        sketch = part.ConstrainedSketch(
-            name='__rebar_trans_%s_%d__' % (layer_name, i),
-            sheetSize=config.beam_width
-        )
+        # Create datum points for rebar ends
+        p1 = (x_pos, config.rebar_cover, z_pos)
+        p2 = (x_pos, config.beam_width - config.rebar_cover, z_pos)
         
-        sketch.Line(
-            point1=(x_pos, config.rebar_cover),
-            point2=(x_pos, config.beam_width - config.rebar_cover)
-        )
+        dp1 = part.DatumPointByCoordinate(coords=p1)
+        dp2 = part.DatumPointByCoordinate(coords=p2)
         
-        # Create wire feature
-        part.Wire(sketch=sketch)
+        # Create wire between points
+        part.WirePolyLine(
+            points=((part.datums[dp1.id], part.datums[dp2.id]),),
+            mergeType=IMPRINT,
+            meshable=ON
+        )

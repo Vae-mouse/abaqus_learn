@@ -7,6 +7,7 @@ Creates structured mesh for concrete beam and rebar.
 from abaqus import *
 from abaqusConstants import *
 import mesh
+import regionToolset
 
 
 def mesh_concrete_beam(part, config):
