@@ -8,7 +8,11 @@ import sys
 import os
 
 # Add current directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+except NameError:
+    # __file__ not defined in Abaqus noGUI mode
+    sys.path.insert(0, r'C:\Users\openclaw\abaqus_3dpc')
 
 try:
     from abaqus import *
@@ -24,7 +28,7 @@ except ImportError:
 from config import Config
 from materials import create_concrete_material, create_steel_material
 from materials import create_concrete_section, create_steel_section
-from geometry import create_layered_beam
+from geometry import create_concrete_beam, partition_into_layers, create_assembly
 from rebar import create_rebar_layers
 from meshing import mesh_concrete_part, mesh_rebar_part
 from thermal_coupled import (
