@@ -46,6 +46,10 @@ from meshing import (
     mesh_all_parts,
     verify_mesh_quality
 )
+from cohesive import (
+    create_layer_cohesive_interaction,
+    create_cohesive_contact_property
+)
 
 
 def main():
@@ -128,9 +132,14 @@ def main():
     verify_embedded_constraint(model, assembly)
     
     # Create printing sequence with Model Change
-    print("[8/8] Creating printing sequence (Model Change)...")
+    print("[8/9] Creating printing sequence (Model Change)...")
     printing_setup = create_printing_sequence(model, assembly, config)
     verify_model_change_setup(model, assembly, config)
+    
+    # Create cohesive contact between layers
+    print("[9/9] Creating inter-layer cohesive contact...")
+    cohesive_prop = create_cohesive_contact_property(model)
+    cohesive_setup = create_layer_cohesive_interaction(model, assembly, config)
     
     # Setup gravity load
     gravity = setup_gravity_load(model, config)
@@ -149,6 +158,7 @@ def main():
     print("  Rebar elements: %d" % mesh_stats['rebar_elements'])
     print("  Rebar nodes: %d" % mesh_stats['rebar_nodes'])
     print("  Print layers: %d" % config.get_layer_count())
+    print("  Cohesive interfaces: %d" % (config.get_layer_count() - 1))
     print("\nNext steps:")
     print("  1. Create job and submit")
     print("  2. Monitor simulation progress")
