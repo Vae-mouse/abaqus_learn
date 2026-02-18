@@ -34,6 +34,18 @@ from testing import (
     setup_compression_test,
     create_test_step
 )
+from embedded import (
+    create_embedded_constraint,
+    verify_embedded_constraint
+)
+from element_birth import (
+    create_printing_sequence,
+    verify_model_change_setup
+)
+from meshing import (
+    mesh_all_parts,
+    verify_mesh_quality
+)
 
 
 def main():
@@ -64,21 +76,21 @@ def main():
     os.chdir(work_dir)
     
     # Create model
-    print("\n[1/6] Creating model...")
+    print("\n[1/8] Creating model...")
     model_name = '3DPC_Beam'
     if model_name in mdb.models.keys():
         del mdb.models[model_name]
     model = mdb.Model(name=model_name)
     
     # Create materials
-    print("[2/6] Creating materials...")
+    print("[2/8] Creating materials...")
     concrete_mat = create_concrete_material(model, config)
     steel_mat = create_steel_material(model, config)
     concrete_sec = create_concrete_section(model, config)
     steel_sec = create_steel_section(model, config)
     
     # Create geometry
-    print("[3/6] Creating geometry...")
+    print("[3/8] Creating geometry...")
     beam_part = create_concrete_beam(model, config)
     partition_into_layers(beam_part, config)
     
@@ -89,17 +101,38 @@ def main():
     )
     
     # Create assembly
-    print("[4/6] Creating assembly...")
+    print("[4/8] Creating assembly...")
     assembly = model.rootAssembly
     beam_instance = create_assembly(model, beam_part, config)
     
     # Create rebar
-    print("[5/6] Creating rebar mesh...")
+    print("[5/8] Creating rebar mesh...")
     rebar_part = create_rebar_layers(model, assembly, config)
     
-    # Create printing steps
-    print("[6/6] Creating analysis steps...")
-    print_steps = create_print_steps(model, config)
+    # Assign truss section to rebar
+    rebar_edges = rebar_part.edges
+    rebar_region = regionToolset.Region(edges=rebar_edges)
+    rebar_part.SectionAssignment(
+        region=rebar_region,
+        sectionName='SteelSection'
+    )
+    
+    # Create mesh
+    print("[6/8] Generating mesh...")
+    mesh_stats = mesh_all_parts(model, config)
+    verify_mesh_quality(model, config)
+    
+    # Create embedded constraint
+    print("[7/8] Creating embedded element constraint...")
+    embedded_constraint = create_embedded_constraint(model, assembly, config)
+    verify_embedded_constraint(model, assembly)
+    
+    # Create printing sequence with Model Change
+    print("[8/8] Creating printing sequence (Model Change)...")
+    printing_setup = create_printing_sequence(model, assembly, config)
+    verify_model_change_setup(model, assembly, config)
+    
+    # Setup gravity load
     gravity = setup_gravity_load(model, config)
     
     # Save model
@@ -110,9 +143,15 @@ def main():
     print("Model created successfully!")
     print("=" * 70)
     print("File: %s" % os.path.join(work_dir, '3DPC_Beam.cae'))
+    print("\nModel Statistics:")
+    print("  Concrete elements: %d" % mesh_stats['concrete_elements'])
+    print("  Concrete nodes: %d" % mesh_stats['concrete_nodes'])
+    print("  Rebar elements: %d" % mesh_stats['rebar_elements'])
+    print("  Rebar nodes: %d" % mesh_stats['rebar_nodes'])
+    print("  Print layers: %d" % config.get_layer_count())
     print("\nNext steps:")
-    print("  1. Mesh the model")
-    print("  2. Create job and submit")
+    print("  1. Create job and submit")
+    print("  2. Monitor simulation progress")
     print("  3. Post-process results")
     print("=" * 70)
 
