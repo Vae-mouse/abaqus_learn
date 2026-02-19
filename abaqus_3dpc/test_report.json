@@ -1,0 +1,71 @@
+{
+  "timestamp": "2026-02-19T10:31:58.436615",
+  "tests": [
+    {
+      "name": "Config Module",
+      "status": "PASS",
+      "message": "",
+      "duration": 6.389617919921875e-05
+    },
+    {
+      "name": "Parametric Module",
+      "status": "PASS",
+      "message": "",
+      "duration": 0.00013756752014160156
+    },
+    {
+      "name": "Optimization Module",
+      "status": "PASS",
+      "message": "",
+      "duration": 0.00014328956604003906
+    },
+    {
+      "name": "Damage Module",
+      "status": "PASS",
+      "message": "",
+      "duration": 8.726119995117188e-05
+    },
+    {
+      "name": "XFEM Module",
+      "status": "PASS",
+      "message": "",
+      "duration": 7.915496826171875e-05
+    },
+    {
+      "name": "Thermal Module",
+      "status": "PASS",
+      "message": "",
+      "duration": 7.939338684082031e-05
+    },
+    {
+      "name": "CLI Module",
+      "status": "PASS",
+      "message": "",
+      "duration": 0.013077259063720703
+    },
+    {
+      "name": "GUI Module",
+      "status": "PASS",
+      "message": "",
+      "duration": 0.0009624958038330078
+    },
+    {
+      "name": "File Structure",
+      "status": "PASS",
+      "message": "",
+      "duration": 4.673004150390625e-05
+    },
+    {
+      "name": "Documentation",
+      "status": "PASS",
+      "message": "",
+      "duration": 0.00042247772216796875
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0
+  }
+}

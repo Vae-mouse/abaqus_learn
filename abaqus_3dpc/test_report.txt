@@ -1,0 +1,25 @@
+======================================================================
+ 3DPC Test Report
+ Generated: 2026-02-19T10:31:58.436615
+======================================================================
+
+Summary:
+  Total Tests:   10
+  Passed:        10
+  Failed:        0
+  Success Rate:  100.0%
+
+Detailed Results:
+----------------------------------------------------------------------
+  ✓ Config Module                  (0.00s)
+  ✓ Parametric Module              (0.00s)
+  ✓ Optimization Module            (0.00s)
+  ✓ Damage Module                  (0.00s)
+  ✓ XFEM Module                    (0.00s)
+  ✓ Thermal Module                 (0.00s)
+  ✓ CLI Module                     (0.01s)
+  ✓ GUI Module                     (0.00s)
+  ✓ File Structure                 (0.00s)
+  ✓ Documentation                  (0.00s)
+
+======================================================================
