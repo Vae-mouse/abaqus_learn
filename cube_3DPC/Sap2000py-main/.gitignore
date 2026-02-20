@@ -1,0 +1,9 @@
+__pycache__/
+Test/
+tempCodeRunnerFile.py
+Sap2000py/__pycache__/
+Sap2000py/Bridge/__pycache__/
+Sap2000py/Scripts/__pycache__/
+Sap2000pyTest/
+Tongzhousha_pier.py
+Tongzhousha_Pier_test.py
