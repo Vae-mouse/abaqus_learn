@@ -71,13 +71,6 @@ class CubeCompressionConfig(object):
         self.concrete_E = None  # MPa, Young's modulus - FILL FROM PAPER
         self.concrete_nu = None  # Poisson's ratio - FILL FROM PAPER
         
-        if self.concrete_E is None or self.concrete_nu is None:
-            raise NotImplementedError(
-                "Concrete elastic properties (E, nu) must be specified. "
-                "Please extract actual values from the reference paper and "
-                "update config.py before running."
-            )
-        
         # CDP parameters (to be filled from paper)
         # *Concrete Damaged Plasticity
         self.cdp_dilation_angle = 38.0       # degrees
@@ -90,12 +83,6 @@ class CubeCompressionConfig(object):
         # *Concrete Compression Hardening
         # TODO: Must be extracted from paper - these are placeholder values
         self.concrete_comp_hardening = None
-        
-        if self.concrete_comp_hardening is None:
-            raise NotImplementedError(
-                "Concrete compression hardening data must be provided. "
-                "Please extract the stress-strain curve from the reference paper."
-            )
         
         # Tension stiffening (displacement type): (stress, displacement)
         # *Concrete Tension Stiffening, type=DISPLACEMENT
@@ -138,12 +125,6 @@ class CubeCompressionConfig(object):
         self.cohesive_Enn = None   # Normal modulus (MPa) - FILL FROM PAPER
         self.cohesive_Ess = None   # Shear modulus 1 (MPa) - FILL FROM PAPER
         self.cohesive_Ett = None   # Shear modulus 2 (MPa) - FILL FROM PAPER
-        
-        if self.cohesive_Enn is None:
-            raise NotImplementedError(
-                "Cohesive elastic properties (Enn, Ess, Ett) must be specified. "
-                "Please extract actual values from the reference paper."
-            )
         
         # Density
         self.cohesive_density = 1.0e-9   # tonne/mm3
@@ -240,9 +221,66 @@ class CubeCompressionConfig(object):
         print("Work Directory: %s" % self.work_dir)
         print("=" * 60)
 
+    def validate(self):
+        """
+        Validate that all required parameters are set.
+        
+        Raises:
+            NotImplementedError: If any required parameter is not set
+        """
+        errors = []
+        
+        # Check concrete elastic properties
+        if self.concrete_E is None:
+            errors.append("concrete_E (Young's modulus)")
+        if self.concrete_nu is None:
+            errors.append("concrete_nu (Poisson's ratio)")
+        
+        # Check concrete hardening data
+        if self.concrete_comp_hardening is None:
+            errors.append("concrete_comp_hardening (compression hardening curve)")
+        
+        # Check cohesive properties
+        if self.cohesive_Enn is None:
+            errors.append("cohesive_Enn (normal modulus)")
+        if self.cohesive_Ess is None:
+            errors.append("cohesive_Ess (shear modulus 1)")
+        if self.cohesive_Ett is None:
+            errors.append("cohesive_Ett (shear modulus 2)")
+        
+        # Check loading parameters
+        if not hasattr(self, 'loading_displacement') or self.loading_displacement is None:
+            errors.append("loading_displacement (compression displacement)")
+        
+        if errors:
+            raise NotImplementedError(
+                "The following required parameters are not set:\n" +
+                "\n".join("  - " + e for e in errors) +
+                "\n\nPlease extract these values from the reference paper "
+                "and set them on the config instance before calling validate()."
+            )
+        
+        print("Config validation passed!")
+        return True
+
 
 # Create default config instance
-config = CubeCompressionConfig()
+# NOTE: This will raise NotImplementedError if required parameters are not set
+# To use this project, you must either:
+# 1. Fill in all required parameters in CubeCompressionConfig.__init__
+# 2. Or create a subclass with your specific parameters
+# 3. Or set environment variables before import
+# 
+# Example usage:
+#   from config import CubeCompressionConfig
+#   config = CubeCompressionConfig()
+#   # Then set parameters:
+#   config.concrete_E = 30000.0
+#   config.concrete_nu = 0.2
+#   config.validate()  # Call this after setting all parameters
+#
+# For now, we don't auto-create to avoid import-time errors:
+config = None  # User must create and configure instance
 
 if __name__ == "__main__":
     # Test the config

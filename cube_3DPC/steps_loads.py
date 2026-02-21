@@ -140,14 +140,16 @@ def create_boundary_conditions(model, assembly, config):
     
     # 2. Apply displacement to top plate (RP1)
     # Compression: negative Y displacement
-    # TODO: This value should be extracted from the .inp file or paper
-    # Currently using a placeholder value
-    displacement_magnitude = config.loading_displacement if hasattr(config, 'loading_displacement') else None
+    # Get displacement from config (must be set before calling)
+    displacement_magnitude = config.loading_displacement
+    
+    # The validate() method in config should have already checked this,
+    # but we add an additional check here for clarity
     if displacement_magnitude is None:
         raise NotImplementedError(
-            "Loading displacement not specified in config. "
-            "Please extract the actual displacement value from the .inp file "
-            "or reference paper and add it to CubeCompressionConfig."
+            "loading_displacement is not set in config. "
+            "Please set config.loading_displacement to the compression displacement "
+            "value (in mm) extracted from the reference paper."
         )
     
     model.DisplacementBC(

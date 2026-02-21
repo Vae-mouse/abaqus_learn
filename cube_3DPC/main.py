@@ -19,7 +19,41 @@ import os
 executeOnCaeStartup()
 
 # Import project modules
-from config import config
+from config import CubeCompressionConfig
+
+# TODO: User must configure these parameters from the reference paper
+# This is a template - fill in actual values before running
+def create_config():
+    """
+    Create and configure the simulation parameters.
+    
+    TODO: Fill in all required parameters from the reference paper.
+    The current implementation will raise NotImplementedError.
+    """
+    config = CubeCompressionConfig()
+    
+    # REQUIRED: Concrete elastic properties (from paper)
+    config.concrete_E = None  # TODO: Fill in - Young's modulus in MPa
+    config.concrete_nu = None  # TODO: Fill in - Poisson's ratio
+    
+    # REQUIRED: Concrete compression hardening (from paper)
+    config.concrete_comp_hardening = None  # TODO: Fill in - list of (stress, strain) tuples
+    
+    # REQUIRED: Cohesive properties (from paper)
+    config.cohesive_Enn = None  # TODO: Fill in - normal modulus in MPa
+    config.cohesive_Ess = None  # TODO: Fill in - shear modulus 1 in MPa
+    config.cohesive_Ett = None  # TODO: Fill in - shear modulus 2 in MPa
+    
+    # REQUIRED: Loading conditions (from paper)
+    config.loading_displacement = None  # TODO: Fill in - displacement in mm
+    
+    # Validate all required parameters are set
+    config.validate()
+    
+    return config
+
+
+# Import other modules after config is defined
 from geometry import create_all_parts
 from materials import create_all_materials
 from mesh import create_all_mesh_and_sections
@@ -40,7 +74,11 @@ def create_model():
     
     Returns:
         model: The complete Abaqus model
+        config: The configuration object used
     """
+    # Create configuration
+    config = create_config()
+    
     print("\n" + "=" * 70)
     print("3D Printed Concrete Cube Compression Test")
     print("=" * 70)
@@ -90,15 +128,16 @@ def create_model():
     print("Model creation complete!")
     print("=" * 70)
     
-    return model
+    return model, config
 
 
-def save_model(model):
+def save_model(model, config):
     """
     Save model to work directory
     
     Args:
         model: Abaqus model object
+        config: Configuration object
     """
     # Create work directory if not exists
     if not os.path.exists(config.work_dir):
@@ -114,12 +153,13 @@ def save_model(model):
     print("\nModel saved to: %s" % model_path)
 
 
-def create_and_submit_job(model):
+def create_and_submit_job(model, config):
     """
     Create and submit analysis job
     
     Args:
         model: Abaqus model object
+        config: Configuration object
     """
     print("\n" + "=" * 70)
     print("Creating Analysis Job")
@@ -161,14 +201,14 @@ def main():
     """
     Main execution function
     """
-    # Create model
-    model = create_model()
+    # Create model and get config
+    model, config = create_model()
     
     # Save model
-    save_model(model)
+    save_model(model, config)
     
     # Create job (optional: also submit)
-    create_and_submit_job(model)
+    create_and_submit_job(model, config)
     
     print("\n" + "=" * 70)
     print("Workflow Complete!")
