@@ -99,6 +99,19 @@ def partition_into_layers(part, config):
         print("  Created partition at Y = %.1f mm" % y_offset)
     
     print("  Partitioning complete: %d cells created" % len(part.cells))
+    
+    # TODO: Cohesive element insertion is not yet implemented
+    # The original .inp uses COH3D8 elements between layers
+    # This requires:
+    # 1. Creating cohesive layers at each interface
+    # 2. Meshing with compatible nodes
+    # 3. Assigning cohesive sections
+    raise NotImplementedError(
+        "Cohesive element insertion is not implemented. "
+        "The current implementation only partitions the geometry. "
+        "To fully replicate the .inp file, cohesive layers need to be "
+        "inserted between concrete layers using COH3D8 elements."
+    )
 
 
 def create_support_plate(model, config, name='zhizuo'):

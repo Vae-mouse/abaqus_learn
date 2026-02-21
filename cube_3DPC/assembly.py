@@ -210,6 +210,15 @@ def create_tie_constraints(model, assembly, config):
     
     # Create tie constraints
     # Tie 1: Concrete bottom to bottom plate
+    # TODO: Verify surface selection matches actual geometry
+    if 'SFzhizuos22' not in assembly.surfaces or 'SFconcretezb' not in assembly.surfaces:
+        raise NotImplementedError(
+            "Tie constraint surfaces not properly defined. "
+            "The current implementation uses bounding box selection which may not "
+            "match the actual geometry in the .inp file. "
+            "Please verify and implement proper surface selection."
+        )
+    
     model.Tie(
         name='Constraints1',
         master=assembly.surfaces['SFzhizuos22'],

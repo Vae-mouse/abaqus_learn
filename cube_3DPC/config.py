@@ -66,9 +66,17 @@ class CubeCompressionConfig(object):
         # Density (tonne/mm3 for Abaqus)
         self.concrete_density = 2.4e-9   # 2400 kg/m3 = 2.4e-9 tonne/mm3
         
-        # Elastic properties (to be filled from paper)
-        self.concrete_E = 30000.0        # MPa, Young's modulus (example value)
-        self.concrete_nu = 0.2           # Poisson's ratio (example value)
+        # Elastic properties (MUST be filled from paper)
+        # TODO: These are placeholder values - replace with actual values from reference
+        self.concrete_E = None  # MPa, Young's modulus - FILL FROM PAPER
+        self.concrete_nu = None  # Poisson's ratio - FILL FROM PAPER
+        
+        if self.concrete_E is None or self.concrete_nu is None:
+            raise NotImplementedError(
+                "Concrete elastic properties (E, nu) must be specified. "
+                "Please extract actual values from the reference paper and "
+                "update config.py before running."
+            )
         
         # CDP parameters (to be filled from paper)
         # *Concrete Damaged Plasticity
@@ -80,11 +88,14 @@ class CubeCompressionConfig(object):
         
         # Compression hardening table: (stress, strain)
         # *Concrete Compression Hardening
-        self.concrete_comp_hardening = [
-            (20.0, 0.0),      # Example values - to be updated from paper
-            (30.0, 0.001),
-            (35.0, 0.002),
-        ]
+        # TODO: Must be extracted from paper - these are placeholder values
+        self.concrete_comp_hardening = None
+        
+        if self.concrete_comp_hardening is None:
+            raise NotImplementedError(
+                "Concrete compression hardening data must be provided. "
+                "Please extract the stress-strain curve from the reference paper."
+            )
         
         # Tension stiffening (displacement type): (stress, displacement)
         # *Concrete Tension Stiffening, type=DISPLACEMENT
@@ -121,11 +132,18 @@ class CubeCompressionConfig(object):
             'ADHESIVE5',  # eset-cohesiveXZ, stack direction=2
         ]
         
-        # Common cohesive parameters (to be filled from paper)
+        # Common cohesive parameters (MUST be filled from paper)
         # *ELASTIC, TYPE=TRACTION
-        self.cohesive_Enn = 10000.0   # Normal modulus (MPa)
-        self.cohesive_Ess = 10000.0   # Shear modulus 1 (MPa)
-        self.cohesive_Ett = 10000.0   # Shear modulus 2 (MPa)
+        # TODO: These are placeholder values
+        self.cohesive_Enn = None   # Normal modulus (MPa) - FILL FROM PAPER
+        self.cohesive_Ess = None   # Shear modulus 1 (MPa) - FILL FROM PAPER
+        self.cohesive_Ett = None   # Shear modulus 2 (MPa) - FILL FROM PAPER
+        
+        if self.cohesive_Enn is None:
+            raise NotImplementedError(
+                "Cohesive elastic properties (Enn, Ess, Ett) must be specified. "
+                "Please extract actual values from the reference paper."
+            )
         
         # Density
         self.cohesive_density = 1.0e-9   # tonne/mm3
