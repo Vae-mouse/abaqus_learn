@@ -21,7 +21,7 @@ workDir = r"C:\Users\openclaw\AbaqusTest"
 if not os.path.exists(workDir):
     os.makedirs(workDir)
 os.chdir(workDir)
-print(f"工作目录: {workDir}")
+print("工作目录: %s" % workDir)
 
 # ============================================================
 # 1. 创建模型
@@ -35,7 +35,7 @@ if modelName in mdb.models.keys():
     del mdb.models[modelName]
 
 model = mdb.Model(name=modelName)
-print(f"✓ 创建模型: {modelName}")
+print("✓ 创建模型: %s" % modelName)
 
 # ============================================================
 # 2. 创建部件 (悬臂梁)
@@ -52,8 +52,8 @@ sketch.rectangle(point1=(0.0, 0.0), point2=(100.0, 10.0))
 part = model.Part(name='Beam', dimensionality=THREE_D, type=DEFORMABLE_BODY)
 part.BaseSolidExtrude(sketch=sketch, depth=5.0)
 
-print(f"✓ 创建部件: Beam (100x10x5 mm)")
-print(f"  - 体积: {part.getVolume():.2f} mm³")
+print("✓ 创建部件: Beam (100x10x5 mm)")
+print("  - 体积: %s mm³" % part.getVolume():.2f)
 
 # ============================================================
 # 3. 创建材料
@@ -174,8 +174,8 @@ part.seedPart(size=5.0, deviationFactor=0.1, minSizeFactor=0.1)
 part.generateMesh()
 
 print("✓ 网格划分完成")
-print(f"  - 单元类型: C3D8R (8节点六面体减缩积分)")
-print(f"  - 种子大小: 5.0 mm")
+print("  - 单元类型: C3D8R (8节点六面体减缩积分)")
+print("  - 种子大小: 5.0 mm")
 
 # ============================================================
 # 10. 创建作业并提交计算
@@ -191,7 +191,7 @@ if jobName in mdb.jobs.keys():
 job = mdb.Job(name=jobName, model=modelName, 
               description='Cantilever beam analysis')
 
-print(f"✓ 创建作业: {jobName}")
+print("✓ 创建作业: %s" % jobName)
 
 # 保存模型
 mdb.saveAs(pathName=os.path.join(workDir, 'BeamAnalysis.cae'))
@@ -223,13 +223,13 @@ lastFrame = odb.steps['ApplyLoad'].frames[-1]
 displacement = lastFrame.fieldOutputs['U']
 maxDisp = max([value.magnitude for value in displacement.values])
 
-print(f"✓ 最大位移: {maxDisp:.4f} mm")
+print("✓ 最大位移: %s mm" % maxDisp:.4f)
 
 # 获取最大应力
 stress = lastFrame.fieldOutputs['S']
 maxStress = max([value.maxPrincipal for value in stress.values])
 
-print(f"✓ 最大主应力: {maxStress:.2f} MPa")
+print("✓ 最大主应力: %s MPa" % maxStress:.2f)
 
 # 保存结果
 session.printToFile(fileName=os.path.join(workDir, 'Deformation'), 
@@ -246,7 +246,7 @@ odb.close()
 print("\n" + "=" * 70)
 print("Abaqus 完整工作流程测试完成!")
 print("=" * 70)
-print(f"模型文件: {os.path.join(workDir, 'BeamAnalysis.cae')}")
-print(f"结果文件: {odbPath}")
-print(f"工作目录: {workDir}")
+print("模型文件: %s" % os.path.join(workDir, 'BeamAnalysis.cae'))
+print("结果文件: %s" % odbPath)
+print("工作目录: %s" % workDir)
 print("=" * 70)

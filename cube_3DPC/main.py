@@ -98,7 +98,7 @@ def create_config():
 # Import other modules after config is defined
 from geometry import create_all_parts
 from materials import create_all_materials
-from mesh import create_all_mesh_and_sections
+from meshing import create_all_mesh_and_sections
 from assembly import create_complete_assembly
 from steps_loads import create_all_steps_and_loads
 
