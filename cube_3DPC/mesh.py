@@ -7,6 +7,7 @@ Python 2.7 compatible for Abaqus 2021
 from abaqus import *
 from abaqusConstants import *
 
+print("DEBUG: mesh.py loaded successfully")
 
 def mesh_concrete_cube(part, config):
     """Mesh concrete cube with C3D8R elements"""
@@ -111,6 +112,7 @@ def assign_sections(model, config):
 
 def create_all_mesh_and_sections(model, config):
     """Complete meshing and section assignment"""
+    print("DEBUG: create_all_mesh_and_sections called")
     print("\n" + "=" * 60)
     print("Meshing and Section Assignment")
     print("=" * 60)
