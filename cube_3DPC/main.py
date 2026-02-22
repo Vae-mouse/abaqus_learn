@@ -23,31 +23,73 @@ from config import CubeCompressionConfig
 
 # TODO: User must configure these parameters from the reference paper
 # This is a template - fill in actual values before running
+# Import extracted parameters from .inp file
+from extracted_params import (
+    CONCRETE_COMP_HARDENING,
+    CONCRETE_TENSION_STIFFENING,
+    CONCRETE_COMP_DAMAGE,
+    CONCRETE_TENSION_DAMAGE,
+    ADHESIVE1,
+    ADHESIVE2,
+    ADHESIVE3,
+    ADHESIVE4,
+    ADHESIVE5,
+)
+
+
 def create_config():
     """
     Create and configure the simulation parameters.
     
-    TODO: Fill in all required parameters from the reference paper.
-    The current implementation will raise NotImplementedError.
+    All parameters below are extracted from the cube_compression.inp file.
+    The only missing parameter is the loading displacement, which should be
+    obtained from the reference paper describing the experimental setup.
     """
     config = CubeCompressionConfig()
     
-    # REQUIRED: Concrete elastic properties (from paper)
-    config.concrete_E = None  # TODO: Fill in - Young's modulus in MPa
-    config.concrete_nu = None  # TODO: Fill in - Poisson's ratio
+    # ============================================================
+    # CONCRETE MATERIAL (from *Material, name=concrete)
+    # ============================================================
+    config.concrete_density = 2.5e-9      # tonne/mm3
+    config.concrete_E = 22958.7788        # MPa, Young's modulus
+    config.concrete_nu = 0.2              # Poisson's ratio
     
-    # REQUIRED: Concrete compression hardening (from paper)
-    config.concrete_comp_hardening = None  # TODO: Fill in - list of (stress, strain) tuples
+    # CDP parameters (from *Concrete Damaged Plasticity)
+    config.cdp_dilation_angle = 35.0      # degrees
+    config.cdp_eccentricity = 0.1         # flow potential eccentricity
+    config.cdp_fb0_fc0 = 1.16             # fb0/fc0 ratio
+    config.cdp_k = 0.66667                # K parameter
+    config.cdp_viscosity = 0.0005         # viscosity parameter
     
-    # REQUIRED: Cohesive properties (from paper)
-    config.cohesive_Enn = None  # TODO: Fill in - normal modulus in MPa
-    config.cohesive_Ess = None  # TODO: Fill in - shear modulus 1 in MPa
-    config.cohesive_Ett = None  # TODO: Fill in - shear modulus 2 in MPa
+    # Concrete behavior curves (extracted from .inp)
+    config.concrete_comp_hardening = CONCRETE_COMP_HARDENING
+    config.concrete_tension_stiffening = CONCRETE_TENSION_STIFFENING
+    config.concrete_comp_damage = CONCRETE_COMP_DAMAGE
+    config.concrete_tension_damage = CONCRETE_TENSION_DAMAGE
     
-    # REQUIRED: Loading conditions (from paper)
-    config.loading_displacement = None  # TODO: Fill in - displacement in mm
+    # ============================================================
+    # COHESIVE MATERIALS (from *MATERIAL,NAME=ADHESIVE1-5)
+    # ============================================================
+    # Using ADHESIVE1 as the primary cohesive material
+    # Note: The .inp file defines 5 different adhesives for different
+    # layer interfaces. For simplicity, we use ADHESIVE1 here.
+    config.cohesive_Enn = ADHESIVE1['Enn']    # Normal modulus (MPa)
+    config.cohesive_Ess = ADHESIVE1['Ess']    # Shear modulus 1 (MPa)
+    config.cohesive_Ett = ADHESIVE1['Ett']    # Shear modulus 2 (MPa)
+    config.cohesive_density = ADHESIVE1['density']
+    config.cohesive_GIc = ADHESIVE1['GIc']    # Mode I fracture energy
+    config.cohesive_GIIc = ADHESIVE1['GIIc']  # Mode II fracture energy
+    config.cohesive_GIIIc = ADHESIVE1['GIIIc'] # Mode III fracture energy
     
-    # Validate all required parameters are set
+    # ============================================================
+    # LOADING CONDITIONS
+    # ============================================================
+    # TODO: User must specify the compression displacement
+    # This value should be obtained from the reference paper
+    # describing the experimental setup (e.g., -5.0 mm for 5mm compression)
+    config.loading_displacement = None  # mm - FILL THIS IN
+    
+    # Validate all required parameters
     config.validate()
     
     return config
