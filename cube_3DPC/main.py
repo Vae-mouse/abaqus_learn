@@ -87,7 +87,7 @@ def create_config():
     # TODO: User must specify the compression displacement
     # This value should be obtained from the reference paper
     # describing the experimental setup (e.g., -5.0 mm for 5mm compression)
-    config.loading_displacement = None  # mm - FILL THIS IN
+    config.loading_displacement = -5.0  # mm, compress 5mm
     
     # Validate all required parameters
     config.validate()
